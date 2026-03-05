@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useBackdropStore, useCommandMenuStore, useDividerStore, useFontStore, useThemeStore } from "@/utils/stores";
 import { CommandGroup, CommandItem } from "./primitives";
 
@@ -7,6 +8,13 @@ export function Actions() {
   const { currentDivider } = useDividerStore();
   const { backdrop } = useBackdropStore();
   const { setOpen, setPage } = useCommandMenuStore();
+  const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement);
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
 
   const ACTION_ITEMS = [
     {
@@ -37,6 +45,12 @@ export function Actions() {
       selected: backdrop,
     },
     {
+      id: "toggle-fullscreen",
+      label: "Toggle Fullscreen",
+      action: "fullscreen",
+      selected: isFullscreen ? "Fullscreen" : "Windowed",
+    },
+    {
       id: "view-source",
       label: "View source",
       action: "external",
@@ -55,6 +69,13 @@ export function Actions() {
   const handleActionSelect = (action: (typeof ACTION_ITEMS)[number]) => {
     if (action.action === "theme") {
       toggleTheme();
+      setOpen(false);
+    } else if (action.action === "fullscreen") {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
       setOpen(false);
     } else if (action.action === "navigate" && action.page) {
       setPage(action.page, "main");

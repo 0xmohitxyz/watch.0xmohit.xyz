@@ -19,6 +19,15 @@ function CommandMenu() {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         toggle();
+      } else if (e.key === "f" && !e.metaKey && !e.ctrlKey && !e.altKey && !open) {
+        const tag = document.activeElement?.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA") return;
+        e.preventDefault();
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
       } else if (e.key === "Backspace" && page !== "main") {
         const activeElement = document.activeElement;
         if (
@@ -35,7 +44,7 @@ function CommandMenu() {
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, [toggle, page, goBack]);
+  }, [toggle, page, goBack, open]);
 
   useEffect(() => {
     if (!open) {
