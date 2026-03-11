@@ -8,8 +8,8 @@ function Footer() {
 
   return (
     <footer className="flex justify-between items-center absolute bottom-0 w-full p-6 opacity-50 hover:opacity-100 transition-opacity z-20">
-      <a href="https://watch.boidu.dev" className={cn("text-xs hover:underline underline-offset-2", twVariant)}>
-        watch.boidu.dev
+      <a href="https://watch.0xmohit.xyz" className={cn("text-xs hover:underline underline-offset-2", twVariant)}>
+        watch.0xmohit.xyz
       </a>
       <Weather />
     </footer>
